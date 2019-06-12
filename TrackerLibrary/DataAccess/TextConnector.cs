@@ -2,6 +2,7 @@
 using System.Linq;
 using TrackerLibrary.Models;
 using TrackerLibrary.DataAccess.TextHelpers;
+using System;
 
 namespace TrackerLibrary.DataAccess
 {
@@ -108,6 +109,11 @@ namespace TrackerLibrary.DataAccess
             tournaments.Add(model);
 
             tournaments.SaveToTournamentFile(TournamentFile);
+        }
+
+        public List<TournamentModel> GetTournament_All()
+        {
+            return TournamentFile.FullFilePath().LoadFile().ConvertToTournamentModels(TeamFile, PeopleFile, PrizesFile);
         }
     }
 }
