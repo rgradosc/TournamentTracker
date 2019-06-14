@@ -296,5 +296,10 @@ namespace TrackerLibrary.DataAccess
 
             return output;
         }
+
+        public void UpdateMatchup(MatchupModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
