@@ -40,5 +40,35 @@ namespace TrackerLibrary.Models
         {
             Entries = new List<MatchupEntryModel>();
         }
+
+        public string DisplayName
+        {
+            get
+            {
+                string output = string.Empty;
+
+                foreach (MatchupEntryModel me in Entries)
+                {
+                    if (me.TeamCompeting != null)
+                    {
+                        if (output.Length == 0)
+                        {
+                            output = me.TeamCompeting.TeamName;
+                        }
+                        else
+                        {
+                            output += string.Format(" vs. {0}", me.TeamCompeting.TeamName);
+                        }
+                    }
+                    else
+                    {
+                        output = "Matchup not yet determined.";
+                        break;
+                    }
+                }
+
+                return output;
+            }
+        }
     }
 }
