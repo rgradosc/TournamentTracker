@@ -84,6 +84,7 @@
             this.roundDropDonw.Name = "roundDropDonw";
             this.roundDropDonw.Size = new System.Drawing.Size(226, 38);
             this.roundDropDonw.TabIndex = 3;
+            this.roundDropDonw.SelectedIndexChanged += new System.EventHandler(this.roundDropDonw_SelectedIndexChanged);
             // 
             // unplayedOnlyCheckBox
             // 
