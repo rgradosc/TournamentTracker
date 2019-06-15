@@ -121,7 +121,7 @@ namespace TrackerUI
             tm.Prizes = selectedPrizes;
             tm.EnteredTeams = selectedTeams;
 
-            // TODO - Wire our matchups
+            // Wire our matchups
             TournamentLogic.CreateRounds(tm);
 
 
@@ -129,6 +129,10 @@ namespace TrackerUI
             // Create all of the prizes entries
             // Create all of team entries
             GlobalConfig.Connection.CreateTournament(tm);
+
+            TournamentViewerForm frm = new TournamentViewerForm(tm);
+            frm.Show();
+            this.Close();
         }
     }
 }
