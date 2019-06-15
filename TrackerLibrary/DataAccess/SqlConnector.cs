@@ -299,7 +299,26 @@ namespace TrackerLibrary.DataAccess
 
         public void UpdateMatchup(MatchupModel model)
         {
-            throw new NotImplementedException();
+            using (IDbConnection connection = new SqlConnection(GlobalConfig.CnnString("Tournaments")))
+            {
+                var p = new DynamicParameters();
+                p.Add("@id", model.Id);
+                p.Add("@WinnerId", model.Winner.Id);
+
+                connection.Execute("dbo.spMatchups_Update", p, commandType: CommandType.StoredProcedure);
+
+                foreach (MatchupEntryModel me in model.Entries)
+                {
+                    p = new DynamicParameters();
+                    p.Add("@id", me.Id);
+                    p.Add("@TeamCompetingId", me.TeamCompeting.Id);
+                    p.Add("@Score", me.Score);
+
+                    connection.Execute("dob.spMatchupEntries_Update", p, commandType: CommandType.StoredProcedure);
+
+                }
+                
+            }
         }
     }
 }
