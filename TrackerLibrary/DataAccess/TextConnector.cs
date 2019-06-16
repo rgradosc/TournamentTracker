@@ -2,7 +2,6 @@
 using System.Linq;
 using TrackerLibrary.Models;
 using TrackerLibrary.DataAccess.TextHelpers;
-using System;
 
 namespace TrackerLibrary.DataAccess
 {
@@ -107,6 +106,17 @@ namespace TrackerLibrary.DataAccess
         public void UpdateMatchup(MatchupModel model)
         {
             model.UpdateMatchupToFile();
+        }
+
+        public void CompleteTournament(TournamentModel model)
+        {
+            List<TournamentModel> tournaments = GlobalConfig.TournamentFile.FullFilePath().LoadFile().ConvertToTournamentModels();
+            
+            tournaments.Remove(model);
+
+            tournaments.SaveToTournamentFile();
+
+            TournamentLogic.UpdateTournamentResults(model);
         }
     }
 }
