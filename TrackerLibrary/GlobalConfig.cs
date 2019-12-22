@@ -1,8 +1,8 @@
-﻿using System.Configuration;
-using TrackerLibrary.DataAccess;
-
-namespace TrackerLibrary
+﻿namespace TrackerLibrary
 {
+    using System.Configuration;
+    using DataAccess;
+
     public static class GlobalConfig
     {
         public const string PrizesFile = "PrizeModels.csv";

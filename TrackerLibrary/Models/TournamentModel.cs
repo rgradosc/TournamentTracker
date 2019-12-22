@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TrackerLibrary.Models
+﻿namespace TrackerLibrary.Models
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Represents one tournament, with all of the rounds, matchups, prizes and outcomes.
     /// </summary>

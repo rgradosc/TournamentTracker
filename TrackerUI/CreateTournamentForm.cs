@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using TrackerLibrary;
-using TrackerLibrary.Models;
-
-namespace TrackerUI
+﻿namespace TrackerUI
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Forms;
+    using TrackerLibrary;
+    using TrackerLibrary.Models;
+
     public partial class CreateTournamentForm : Form, IPrizeRequester, ITeamRequester
     {
         List<TeamModel> availableTeams = GlobalConfig.Connection.GetTeam_All();

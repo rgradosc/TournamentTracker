@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using TrackerLibrary.Models;
-
-// * Load the text file
-// * Convert the text to List<PrizeModel>
-// Find the max ID
-// Add the new record with the new ID (max + 1)
-// Convert the prize to List<string>
-// Save the List<string> to the text file
-
-namespace TrackerLibrary.DataAccess.TextHelpers
+﻿namespace TrackerLibrary.DataAccess.TextHelpers
 {
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.IO;
+    using System.Linq;
+    using Models;
+
     public static class TextConnectorProcessor
     {
         public static string FullFilePath(this string fileName) // PrizeModels.csv
@@ -103,8 +95,6 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
         public static List<TournamentModel> ConvertToTournamentModels(this List<string> lines)
         {
-            // id
-
             List<TournamentModel> output = new List<TournamentModel>();
             List<TeamModel> teams = GlobalConfig.TeamFile.FullFilePath().LoadFile().ConvertToTeamModels();
             List<PrizeModel> prizes = GlobalConfig.PrizesFile.FullFilePath().LoadFile().ConvertToPrizeModels();
