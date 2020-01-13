@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using TrackerLibrary.Models;
-using TrackerLibrary.DataAccess.TextHelpers;
-
-namespace TrackerLibrary.DataAccess
+﻿namespace TrackerLibrary.DataAccess
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Models;
+    using TextHelpers;
+
     public class TextConnector : IDataConnection
     {
         public void CreatePrize(PrizeModel model)

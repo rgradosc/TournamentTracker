@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Net.Mail;
-
+﻿
 namespace TrackerLibrary
 {
+    using System.Collections.Generic;
+    using System.Net.Mail;
+
     public static class EmailLogic
     {
         public static void SendEmail(string to, string subject, string body)

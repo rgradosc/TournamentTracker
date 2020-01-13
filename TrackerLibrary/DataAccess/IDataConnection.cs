@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using TrackerLibrary.Models;
-
-namespace TrackerLibrary.DataAccess
+﻿namespace TrackerLibrary.DataAccess
 {
+    using System.Collections.Generic;
+    using Models;
+
     public interface IDataConnection
     {
         void CreatePrize(PrizeModel model);

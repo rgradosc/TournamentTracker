@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using TrackerLibrary.Models;
-
-namespace TrackerLibrary
+﻿namespace TrackerLibrary
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Linq;
+    using System.Text;
+    using Models;
+
     public static class TournamentLogic
     {
         // Order our list randomly of teams

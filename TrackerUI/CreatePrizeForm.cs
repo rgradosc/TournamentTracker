@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using TrackerLibrary;
-using TrackerLibrary.DataAccess;
-using TrackerLibrary.Models;
-
-namespace TrackerUI
+﻿namespace TrackerUI
 {
+    using System;
+    using System.Windows.Forms;
+    using TrackerLibrary;
+    using TrackerLibrary.Models;
+
     public partial class CreatePrizeForm : Form
     {
         IPrizeRequester callingForm;

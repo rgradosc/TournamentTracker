@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TrackerLibrary.Models;
-using System.Data;
-using System.Data.SqlClient;
-using Dapper;
-
-namespace TrackerLibrary.DataAccess
+﻿namespace TrackerLibrary.DataAccess
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Data;
+    using System.Data.SqlClient;
+    using Dapper;
+    using Models;
+
     public class SqlConnector : IDataConnection
     {
         private const string db = "Tournaments";
@@ -331,7 +328,7 @@ namespace TrackerLibrary.DataAccess
             {
                 var p = new DynamicParameters();
                 p.Add("@id", model.Id);
-                
+
                 connection.Execute("dbo.spTournaments_Complete", p, commandType: CommandType.StoredProcedure);
             }
         }
