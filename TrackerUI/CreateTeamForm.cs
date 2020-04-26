@@ -2,9 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Windows.Forms;
     using TrackerLibrary;
     using TrackerLibrary.Models;
+    using TrackerUI.Resources;
 
     public partial class CreateTeamForm : Form
     {
@@ -18,6 +20,8 @@
             InitializeComponent();
 
             callingForm = caller;
+
+            SettingInputPlaceholder();
 
             WireUpLists();
         }
@@ -33,9 +37,51 @@
             teamMembersListBox.DisplayMember = "FullName";
         }
 
+        private void HoveredControl(Control control, string message)
+        {
+            if (control.Text.ToLower() == message.ToLower())
+            {
+                control.Text = string.Empty;
+                control.ForeColor = Color.FromArgb(45, 53, 64);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(control.Text))
+            {
+                control.Text = message;
+                control.ForeColor = Color.FromArgb(164, 162, 165);
+                return;
+            }
+        }
+
+        private void ManageControl(Control control)
+        {
+            switch (control.Name)
+            {
+                case "teamNameValue":
+                    HoveredControl(control, Team_Resource.TeamNamePlaceholder);
+                    break;
+                case "selectTeamMemberDropDown":
+                    HoveredControl(control, Team_Resource.MemberPlaceholder);
+                    break;
+                case "firstNameValue":
+                    HoveredControl(control, Team_Resource.FirstNamePlaceholder);
+                    break;
+                case "lastNameValue":
+                    HoveredControl(control, Team_Resource.LastNamePlaceholder);
+                    break;
+                case "emailValue":
+                    HoveredControl(control, Team_Resource.EmailPlaceholder);
+                    break;
+                case "cellphoneValue":
+                    HoveredControl(control, Team_Resource.CellphonePlaceholder);
+                    break;
+            }
+        }
+
         private void createMemberButton_Click(object sender, EventArgs e)
         {
-            if (ValidateForm())
+            if (ValidateMemberInfo())
             {
                 PersonModel p = new PersonModel();
 
@@ -56,33 +102,63 @@
             }
             else
             {
-                MessageBox.Show("You need to fill in all of the fields.");
+                MessageBox.Show(Team_Resource.InvalidInformation);
             }
         }
 
-        private bool ValidateForm()
+        private bool ValidateMemberInfo()
         {
-            if (firstNameValue.Text.Length == 0)
+            if (firstNameValue.Text == Team_Resource.FirstNamePlaceholder)
             {
+                firstNameValue.Focus();
                 return false;
             }
 
-            if (lastNameValue.Text.Length == 0)
+            if (lastNameValue.Text == Team_Resource.LastNamePlaceholder)
             {
+                lastNameValue.Focus();
                 return false;
             }
 
-            if (emailValue.Text.Length == 0)
+            if (emailValue.Text == Team_Resource.EmailPlaceholder)
             {
+                emailValue.Focus();
                 return false;
             }
 
-            if (cellphoneValue.Text.Length == 0)
+            if (cellphoneValue.Text == Team_Resource.CellphonePlaceholder)
+            {
+                cellphoneValue.Focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateTeamInfo()
+        {
+            if (teamNameValue.Text == Team_Resource.TeamNamePlaceholder)
+            {
+                teamNameValue.Focus();
+                return false;
+            }
+
+            if (teamMembersListBox.Items.Count <= 1)
             {
                 return false;
             }
 
             return true;
+        }
+
+        private void SettingInputPlaceholder()
+        {
+            teamNameValue.Text = Team_Resource.TeamNamePlaceholder;
+            selectTeamMemberDropDown.Text = Team_Resource.MemberPlaceholder;
+            firstNameValue.Text = Team_Resource.FirstNamePlaceholder;
+            lastNameValue.Text = Team_Resource.LastNamePlaceholder;
+            emailValue.Text = Team_Resource.EmailPlaceholder;
+            cellphoneValue.Text = Team_Resource.CellphonePlaceholder;
         }
 
         private void addMemberButton_Click(object sender, EventArgs e)
@@ -94,7 +170,7 @@
                 availableTeamMembers.Remove(p);
                 selectedTeamMembers.Add(p);
 
-                WireUpLists(); 
+                WireUpLists();
             }
         }
 
@@ -113,16 +189,43 @@
 
         private void createTeamButton_Click(object sender, EventArgs e)
         {
-            TeamModel t = new TeamModel();
+            if (ValidateTeamInfo())
+            {
+                TeamModel t = new TeamModel();
 
-            t.TeamName = teamNameValue.Text;
-            t.TeamMembers = selectedTeamMembers;
+                t.TeamName = teamNameValue.Text;
+                t.TeamMembers = selectedTeamMembers;
 
-            GlobalConfig.Connection.CreateTeam(t);
+                GlobalConfig.Connection.CreateTeam(t);
 
-            callingForm.TeamComplete(t);
+                callingForm.TeamComplete(t);
 
-            this.Close();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show(Team_Resource.InvalidInformation);
+            }
+        }
+
+        private void textBoxControl_Enter(object sender, EventArgs e)
+        {
+            ManageControl((TextBox)sender);
+        }
+
+        private void textBoxControl_Leave(object sender, EventArgs e)
+        {
+            ManageControl((TextBox)sender);
+        }
+
+        private void dropDownControl_Enter(object sender, EventArgs e)
+        {
+            ManageControl((ComboBox)sender);
+        }
+
+        private void dropDownControl_Leave(object sender, EventArgs e)
+        {
+            ManageControl((ComboBox)sender);
         }
     }
 }

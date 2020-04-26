@@ -2,9 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Windows.Forms;
+    using System.Linq;
     using TrackerLibrary;
     using TrackerLibrary.Models;
+    using Resources;
 
     public partial class CreateTournamentForm : Form, IPrizeRequester, ITeamRequester
     {
@@ -18,6 +21,8 @@
         {
             InitializeComponent();
             WireUpLists();
+            SettingInputPlaceholder();
+            SetForeColorDropDown();
         }
 
         private void WireUpLists()
@@ -25,6 +30,7 @@
             selectTeamDropDown.DataSource = null;
             selectTeamDropDown.DataSource = availableTeams;
             selectTeamDropDown.DisplayMember = "TeamName";
+            selectTeamDropDown.SelectedIndex = -1;
 
             tournamentTeamsListBox.DataSource = null;
             tournamentTeamsListBox.DataSource = selectedTeams;
@@ -35,6 +41,56 @@
             prizesListBox.DisplayMember = "PlaceName";
         }
 
+        private void SetForeColorDropDown()
+        {
+            if (selectTeamDropDown.SelectedIndex == -1)
+            {
+                selectTeamDropDown.ForeColor = Color.FromArgb(164, 162, 165);
+                selectTeamDropDown.Text = Tournament_Resource.SelectTeamPlaceholder;
+                return;
+            }
+        }
+
+        private void SettingInputPlaceholder()
+        {
+            tournamentNameValue.Text = Tournament_Resource.TournamentNamePlaceholder;
+            entryFeeValue.Text = Tournament_Resource.EntryFeePlaceholder;
+            selectTeamDropDown.Text = Tournament_Resource.SelectTeamPlaceholder;
+        }
+
+        private void HoveredControl(Control control, string message)
+        {
+            if (control.Text.ToLower() == message.ToLower())
+            {
+                control.Text = string.Empty;
+                control.ForeColor = Color.FromArgb(45, 53, 64);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(control.Text))
+            {
+                control.Text = message;
+                control.ForeColor = Color.FromArgb(164, 162, 165);
+                return;
+            }
+        }
+
+        private void ManageControl(Control control)
+        {
+            switch (control.Name)
+            {
+                case "tournamentNameValue":
+                    HoveredControl(control, Tournament_Resource.TournamentNamePlaceholder);
+                    break;
+                case "entryFeeValue":
+                    HoveredControl(control, Tournament_Resource.EntryFeePlaceholder);
+                    break;
+                case "selectTeamDropDown":
+                    HoveredControl(control, Tournament_Resource.SelectTeamPlaceholder);
+                    break;
+            }
+        }
+
         private void addTeamButton_Click(object sender, EventArgs e)
         {
             TeamModel t = (TeamModel)selectTeamDropDown.SelectedItem;
@@ -42,8 +98,12 @@
             if (t != null)
             {
                 availableTeams.Remove(t);
+                var temp = availableTeams.ToList();
+                availableTeams = null;
+                availableTeams = temp;
                 selectedTeams.Add(t);
                 WireUpLists();
+                SetForeColorDropDown();
             }
         }
 
@@ -51,7 +111,7 @@
         {
             // Call the CreatePrizeForm
             CreatePrizeForm frm = new CreatePrizeForm(this);
-            frm.Show();
+            frm.ShowDialog();
         }
 
         public void PrizeComplete(PrizeModel model)
@@ -71,7 +131,7 @@
         private void createNewTeamLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             CreateTeamForm frm = new CreateTeamForm(this);
-            frm.Show();
+            frm.ShowDialog();
         }
 
         private void removeSelectedPlayerButton_Click(object sender, EventArgs e)
@@ -82,7 +142,6 @@
             {
                 selectedTeams.Remove(t);
                 availableTeams.Add(t);
-
                 WireUpLists();
             }
         }
@@ -103,12 +162,29 @@
         {
             // Validate data
 
+            string tournamentName = tournamentNameValue.Text;
+
+            if (tournamentName == Tournament_Resource.TournamentNamePlaceholder)
+            {
+                MessageBox.Show(Tournament_Resource.InvalidNameDescription, 
+                                Tournament_Resource.InvalidNameCaption, 
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                tournamentNameValue.Focus();
+
+                return;
+            }
+
             decimal fee = 0;
-            bool feeAceptable = decimal.TryParse(entryFeeValue.Text,  out fee);
+            bool feeAceptable = decimal.TryParse(entryFeeValue.Text, out fee);
 
             if (!feeAceptable)
             {
-                MessageBox.Show("You need to enter a valid Entry Fee.", "Invalid Fee", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Tournament_Resource.InvalidFeeDescription, 
+                                Tournament_Resource.InvalidFeeCaption, 
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                entryFeeValue.Focus();
 
                 return;
             }
@@ -135,6 +211,26 @@
             TournamentViewerForm frm = new TournamentViewerForm(tm);
             frm.Show();
             this.Close();
+        }
+
+        private void textBoxControl_Leave(object sender, EventArgs e)
+        {
+            ManageControl((TextBox)sender);
+        }
+
+        private void textBoxControl_Enter(object sender, EventArgs e)
+        {
+            ManageControl((TextBox)sender);
+        }
+
+        private void dropDownControl_Leave(object sender, EventArgs e)
+        {
+            ManageControl((ComboBox)sender);
+        }
+
+        private void dropDownControl_Enter(object sender, EventArgs e)
+        {
+            ManageControl((ComboBox)sender);
         }
     }
 }

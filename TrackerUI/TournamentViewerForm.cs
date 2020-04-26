@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Drawing;
     using System.Linq;
     using System.Windows.Forms;
     using TrackerLibrary;
@@ -170,6 +171,33 @@
             return output;
         }
 
+        private void HoveredControl(Control control, string message)
+        {
+            if (control.Text.ToLower() == message.ToLower())
+            {
+                control.Text = string.Empty;
+                control.ForeColor = Color.FromArgb(45, 53, 64);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(control.Text))
+            {
+                control.Text = message;
+                control.ForeColor = Color.FromArgb(164, 162, 165);
+                return;
+            }
+        }
+
+        private void ManageControl(Control control)
+        {
+            switch (control.Name)
+            {
+                case "roundDropDonw":
+                    HoveredControl(control, "Choose Round");
+                    break;
+            }
+        }
+
         private void roundDropDonw_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadMatchups((int)roundDropDonw.SelectedItem);
@@ -249,6 +277,16 @@
             }
             
             LoadMatchups((int)roundDropDonw.SelectedItem);
+        }
+
+        private void TournamentViewerForm_Leave(object sender, EventArgs e)
+        {
+            ManageControl((ComboBox)sender);
+        }
+
+        private void TournamentViewerForm_Enter(object sender, EventArgs e)
+        {
+            ManageControl((ComboBox)sender);
         }
     }
 }
